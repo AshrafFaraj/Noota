@@ -1,10 +1,11 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:note_app/app_color.dart';
-import 'package:note_app/features/notes/notes_view.dart';
-import 'widgets/home_crad.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../core/custom_bottom_sheet.dart';
+import '../../core/utils/app_color.dart';
+import 'manager/categories_cubit/categories_cubit.dart';
+import 'widgets/home_grid_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -14,20 +15,11 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final TextEditingController categoryController = TextEditingController();
   @override
-  void initState() {
-    super.initState();
-    getDate();
-  }
-
-  List<QueryDocumentSnapshot> data = [];
-  Future<void> getDate() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('categories')
-        .where("uid", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    data.addAll(querySnapshot.docs);
-    setState(() {});
+  void dispose() {
+    super.dispose();
+    categoryController.dispose();
   }
 
   @override
@@ -49,48 +41,23 @@ class _HomeViewState extends State<HomeView> {
           'Home Page',
         ),
       ),
-      body: GridView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemCount: data.length,
-        itemBuilder: (context, index) => GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => NotesView(
-                      name: data[index]['name'], docId: data[index].id)));
-            },
-            onLongPress: () {
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.warning,
-                animType: AnimType.bottomSlide,
-                btnOkText: 'تعديل',
-                btnOkColor: AppColor.primary,
-                btnOkOnPress: () {
-                  Navigator.of(context).pushNamed('edit', arguments: {
-                    'id': data[index].id,
-                    'oldName': data[index]['name'],
-                  });
-                },
-                btnCancelText: 'حذف',
-                btnCancelOnPress: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    'home',
-                    (route) => false,
-                  );
-                  FirebaseFirestore.instance
-                      .collection('categories')
-                      .doc(data[index].id)
-                      .delete();
-                },
-              ).show();
-            },
-            child: HomeCard(title: data[index]['name'])),
+      body: Home_GridView(
+        categoryController: categoryController,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed('add');
+          categoryController.clear();
+          customBottomSheet(
+              context: context,
+              bottonTitel: 'اضافة القسم',
+              hint: 'ادخل اسم القسم الجديد',
+              controller: categoryController,
+              onPressed: () {
+                context
+                    .read<CategoriesCubit>()
+                    .addCategory(newCategory: categoryController.text);
+                Navigator.pop(context);
+              });
         },
         backgroundColor: AppColor.secondColor,
         child: Icon(

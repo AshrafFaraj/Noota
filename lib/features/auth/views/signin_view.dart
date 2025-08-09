@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:note_app/app_color.dart';
+import 'package:note_app/core/utils/app_color.dart';
 
 import 'widgets/auth_subtitle.dart';
 import 'widgets/auth_title.dart';

@@ -1,13 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:note_app/features/categories/edit_category.dart';
-import 'package:note_app/firebase_options.dart';
-import '/app_color.dart';
-import '/features/categories/add_category.dart';
-import '/features/auth/views/signin_view.dart';
-import '/features/auth/views/signup_view.dart';
-import 'features/home/home_view.dart';
+
+import '/firebase_options.dart';
+import 'core/utils/initial_route.dart';
+import 'core/utils/my_routes.dart';
+import 'core/utils/my_theme_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,25 +45,9 @@ class NoteApp extends StatelessWidget {
     });
 
     return MaterialApp(
-      theme: ThemeData(
-          appBarTheme: AppBarTheme(
-              iconTheme: IconThemeData(color: AppColor.primary),
-              titleTextStyle: TextStyle(
-                  color: AppColor.primary,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500))),
-      debugShowCheckedModeBanner: false,
-      home: (FirebaseAuth.instance.currentUser != null &&
-              FirebaseAuth.instance.currentUser!.emailVerified)
-          ? HomeView()
-          : SignInView(),
-      routes: {
-        'signin': (context) => SignInView(),
-        'signup': (context) => SignUpView(),
-        'home': (context) => HomeView(),
-        'add': (context) => AddCategory(),
-        'edit': (context) => EditCategory(),
-      },
-    );
+        theme: myTheme,
+        debugShowCheckedModeBanner: false,
+        initialRoute: initialRoute(),
+        routes: myRoutes);
   }
 }

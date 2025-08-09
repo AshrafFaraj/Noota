@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app_color.dart';
+import '../../../../core/utils/app_color.dart';
 
 class AuthSubTitle extends StatelessWidget {
   const AuthSubTitle({

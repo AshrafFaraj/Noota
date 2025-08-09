@@ -17,9 +17,6 @@ class NoteCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              height: 10,
-            ),
             Text(
               title,
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '/app_color.dart';
+import '../../../core/utils/app_color.dart';
 import 'widgets/auth_subtitle.dart';
 import 'widgets/auth_title.dart';
 import 'widgets/custom_button.dart';
