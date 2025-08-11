@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/utils/app_color.dart';
+import '../../../../../core/utils/app_color.dart';
 
-class DontHave extends StatelessWidget {
-  const DontHave({
+class AuthViewTailer extends StatelessWidget {
+  const AuthViewTailer({
     super.key,
     required this.quetion,
     required this.actionTitle,
@@ -26,7 +26,9 @@ class DontHave extends StatelessWidget {
             child: Text(
               actionTitle,
               style: TextStyle(
-                  color: AppColor.primary, fontWeight: FontWeight.w500),
+                  fontSize: 16,
+                  color: AppColor.primary,
+                  fontWeight: FontWeight.w600),
             ))
       ],
     );

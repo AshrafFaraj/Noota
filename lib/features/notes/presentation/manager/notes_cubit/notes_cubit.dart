@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:note_app/core/utils/firestore_collections_path.dart';
+import 'package:note_app/core/constants/firestore_collections_path.dart';
 import 'package:note_app/features/notes/data/models/note_mode.dart';
 import '/features/notes/data/repo/note_repo.dart';
 

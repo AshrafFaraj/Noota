@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import '/features/auth/views/widgets/custom_text_field.dart';
 
-import '../features/auth/views/widgets/custom_button.dart';
+import '/core/utils/classes/app_validator.dart';
+import '../features/auth/presentation/view/widgets/custom_text_field.dart';
+import '../features/auth/presentation/view/widgets/custom_button.dart';
 import 'utils/app_color.dart';
 
-void customBottomSheet(
-    {required BuildContext context,
-    TextEditingController? controller,
-    void Function()? onPressed,
-    String? hint,
-    String? bottonTitel}) {
+void customBottomSheet({
+  required BuildContext context,
+  TextEditingController? controller,
+  void Function()? onPressed,
+  String? hint,
+  String? bottonTitel,
+}) {
+  final formState = GlobalKey<FormState>();
   showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -22,23 +25,38 @@ void customBottomSheet(
                 right: 16.0,
                 left: 16,
                 bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Wrap(
-              children: [
-                CustomTextField(
-                  hint: hint,
-                  controller: controller,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: CustomButton(
-                      onPressed: onPressed,
-                      color: AppColor.secondColor,
-                      title: bottonTitel ?? 'حسناً'),
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Wrap(
+                children: [
+                  Form(
+                    key: formState,
+                    child: Column(
+                      children: [
+                        CustomTextField(
+                          validator: AppValidator.requiredField,
+                          keyboardType: TextInputType.multiline,
+                          hint: hint,
+                          controller: controller,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: CustomButton(
+                              onPressed: () {
+                                if (formState.currentState!.validate()) {
+                                  onPressed;
+                                }
+                              },
+                              color: AppColor.secondColor,
+                              title: bottonTitel ?? 'حسناً'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ));
 }

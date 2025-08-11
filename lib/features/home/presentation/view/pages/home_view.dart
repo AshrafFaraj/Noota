@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/custom_bottom_sheet.dart';
-import '../../core/utils/app_color.dart';
-import 'manager/categories_cubit/categories_cubit.dart';
-import 'widgets/home_grid_view.dart';
+import '../../../../../core/custom_bottom_sheet.dart';
+import '../../../../../core/utils/app_color.dart';
+import '../../manager/categories_cubit/categories_cubit.dart';
+import '../widgets/home_grid_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

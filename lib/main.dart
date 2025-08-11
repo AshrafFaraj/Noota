@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import '/firebase_options.dart';
-import 'core/utils/initial_route.dart';
+import 'core/utils/functions/initial_route.dart';
 import 'core/utils/my_routes.dart';
 import 'core/utils/my_theme_data.dart';
 

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:note_app/features/notes/data/models/note_mode.dart';
 import '/core/errors/failure.dart';
-import '/core/utils/firebase_services.dart';
+import '../../../../core/services/firestore_services.dart';
 import '/features/notes/data/repo/note_repo.dart';
 
 class NoteRepoImp implements NoteRepo {
