@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:note_app/core/constants/firestore_collections_path.dart';
-import 'package:note_app/features/notes/data/models/note_mode.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '/features/notes/data/models/note_mode.dart';
 import '/features/notes/data/repo/note_repo.dart';
 
 part 'notes_state.dart';
@@ -16,10 +17,7 @@ class NotesCubit extends Cubit<NotesState> {
     required String docId,
   }) async {
     emit(NotesLoading());
-    final result = await noteRepo.fetchNotes(
-        collectionPath: FirestoreCollecPath.categoriesCollec,
-        subCollectionPath: FirestoreCollecPath.noteSubCollec,
-        docId: docId);
+    final result = await noteRepo.fetchNotes(docId: docId);
 
     result.fold((failure) {
       emit(NotesFailure(errMessage: failure.errMessage));
@@ -29,16 +27,11 @@ class NotesCubit extends Cubit<NotesState> {
     });
   }
 
-  Future<void> addNote({
-    required String docId,
-    required String newNote,
-  }) async {
+  Future<void> addNote(
+      {required String docId, required String newNote, XFile? xfile}) async {
     emit(NotesLoading());
-    final result = await noteRepo.addNote(
-        collectionPath: FirestoreCollecPath.categoriesCollec,
-        subCollectionPath: FirestoreCollecPath.noteSubCollec,
-        docId: docId,
-        newNote: newNote);
+    final result =
+        await noteRepo.addNote(docId: docId, newNote: newNote, xfile: xfile);
 
     result.fold((failure) {
       emit(NotesFailure(errMessage: failure.errMessage));
@@ -52,38 +45,29 @@ class NotesCubit extends Cubit<NotesState> {
   Future<void> editNote({
     required String docId,
     required String subDocId,
-    required String newNote,
+    required Map<String, dynamic> newData,
   }) async {
     emit(NotesLoading());
     final result = await noteRepo.editNote(
-        collectionPath: FirestoreCollecPath.categoriesCollec,
-        subCollectionPath: FirestoreCollecPath.noteSubCollec,
-        docId: docId,
-        subDocId: subDocId,
-        newNote: newNote);
+        docId: docId, subDocId: subDocId, newData: newData);
 
     result.fold((failure) {
       emit(NotesFailure(errMessage: failure.errMessage));
     }, (_) {
-      int index = _notes.indexWhere((e) => e.id == subDocId);
-      if (index != -1) {
-        _notes[index].setNote = newNote;
-      }
-      emit(NotesEditSuccess());
-      emit(NotesLoaded(notes: List.from(_notes)));
+      editLocalListNote(subDocId: subDocId, newData: newData);
+      emit(NotesEditSuccess(subDocId)); // تعديل هنا
+      emit(NotesLoaded(
+          notes: List.from(_notes), updatedId: subDocId)); // تعديل هنا
     });
   }
 
-  Future<void> deleteNote({
-    required String docId,
-    required String subDocId,
-  }) async {
+  Future<void> deleteNote(
+      {required String docId,
+      required String subDocId,
+      required String imageUrl}) async {
     emit(NotesLoading());
     final result = await noteRepo.deleteNote(
-        collectionPath: FirestoreCollecPath.categoriesCollec,
-        subCollectionPath: FirestoreCollecPath.noteSubCollec,
-        docId: docId,
-        subDocId: subDocId);
+        docId: docId, subDocId: subDocId, imageUrl: imageUrl);
 
     result.fold((failure) {
       emit(NotesFailure(errMessage: failure.errMessage));
@@ -92,5 +76,49 @@ class NotesCubit extends Cubit<NotesState> {
       emit(NotesDeleteSuccess());
       emit(NotesLoaded(notes: List.from(_notes)));
     });
+  }
+
+  Future<void> editNoteImage({
+    required String docId,
+    required String subDocId,
+    required String imageUrl,
+    required XFile newFile,
+  }) async {
+    final result =
+        await noteRepo.editNoteImage(imageUrl: imageUrl, newFile: newFile);
+    result.fold((failure) {
+      emit(NotesFailure(errMessage: failure.errMessage));
+    }, (url) async {
+      await editNote(
+          docId: docId, subDocId: subDocId, newData: {'imageUrl': url});
+    });
+  }
+
+  Future<void> deletNoteImage({
+    required String docId,
+    required String subDocId,
+    required String imageUrl,
+  }) async {
+    final result = await noteRepo.deleteNoteImage(
+        docId: docId, subDocId: subDocId, imageUrl: imageUrl);
+    result.fold((failure) {
+      emit(NotesFailure(errMessage: failure.errMessage));
+    }, (_) async {
+      await editNote(
+          docId: docId, subDocId: subDocId, newData: {'imageUrl': 'none'});
+    });
+  }
+
+  void editLocalListNote({
+    required String subDocId,
+    required Map<String, dynamic> newData,
+  }) {
+    _notes = _notes.map((note) {
+      if (note.id != subDocId) return note;
+      return note.copyWith(
+        note: newData['note'] as String?,
+        imageUrl: newData['imageUrl'] as String?,
+      );
+    }).toList();
   }
 }

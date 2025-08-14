@@ -51,8 +51,7 @@ class HomeRepoImp implements HomeRepo {
   @override
   Future<Either<Failure, void>> deleteCategory({required String docId}) async {
     try {
-      await firestoreService.deleteDocument(
-          collectionPath: FirestoreCollecPath.categoriesCollec, docId: docId);
+      await firestoreService.deleteDocument(docId: docId);
       return right(null);
     } on FirebaseException catch (e) {
       return left(FirebaseFailure.fromFirestoreException(e));
@@ -63,10 +62,8 @@ class HomeRepoImp implements HomeRepo {
   Future<Either<Failure, void>> editCategory(
       {required String docId, required String newCategory}) async {
     try {
-      await firestoreService.editDocument(
-          collectionPath: FirestoreCollecPath.categoriesCollec,
-          docId: docId,
-          data: {'name': newCategory});
+      await firestoreService
+          .editDocument(docId: docId, data: {'name': newCategory});
       return right(null);
     } on FirebaseException catch (e) {
       return left(FirebaseFailure.fromFirestoreException(e));

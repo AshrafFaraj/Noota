@@ -1,10 +1,9 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../widgets/custom_note_bottom_sheet.dart';
 import '../widgets/custom_notes_grid.dart';
 import '../../../../../core/utils/app_color.dart';
-import '../../../../../core/custom_bottom_sheet.dart';
 import '/features/notes/presentation/manager/notes_cubit/notes_cubit.dart';
 
 class NotesView extends StatefulWidget {
@@ -33,62 +32,17 @@ class _HomeViewState extends State<NotesView> {
           widget.name,
         ),
       ),
-      body: BlocConsumer<NotesCubit, NotesState>(
-        listener: (context, state) {
-          if (state is NotesAddSuccess) {
-            AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.success,
-                    title: 'تم اضافة الملاحظة بنجاح')
-                .show();
-          } else if (state is NotesDeleteSuccess) {
-            AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.success,
-                    title: 'تم الحذف بنجاح')
-                .show();
-          } else if (state is NotesEditSuccess) {
-            AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.success,
-                    title: 'تم التعديل بنجاح')
-                .show();
-          }
-        },
-        builder: (context, state) {
-          var cubit = BlocProvider.of<NotesCubit>(context);
-          if (state is NotesLoaded) {
-            var notes = state.notes;
-            return CustomNotesGrid(
-              docId: widget.docId,
-              notesCubit: cubit,
-              notes: notes,
-              controller: controller,
-            );
-          } else if (state is NotesFailure) {
-            return Center(
-              child: Text(state.errMessage),
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
+      body: CustomNotesGrid(controller: controller, docId: widget.docId),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           controller.clear();
-          customBottomSheet(
+          customNoteBottomSheet(
+              isAddType: true,
               context: context,
               bottonTitel: 'اضافة الملاحظة',
               controller: controller,
-              onPressed: () {
-                context
-                    .read<NotesCubit>()
-                    .addNote(docId: widget.docId, newNote: controller.text);
-                Navigator.pop(context);
-              });
+              docId: widget.docId,
+              notesCubit: context.read<NotesCubit>());
         },
         backgroundColor: AppColor.secondColor,
         child: Icon(

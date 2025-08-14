@@ -1,31 +1,32 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:note_app/features/notes/data/models/note_mode.dart';
+import 'package:image_picker/image_picker.dart';
+import '/features/notes/data/models/note_mode.dart';
 import '/core/errors/failure.dart';
 
 abstract class NoteRepo {
   Future<Either<Failure, List<NoteModel>>> fetchNotes({
-    required String collectionPath,
-    required String subCollectionPath,
     required String docId,
   });
-  Future<Either<Failure, NoteModel>> addNote({
-    required String collectionPath,
-    required String subCollectionPath,
-    required String docId,
-    required String newNote,
-  });
+  Future<Either<Failure, NoteModel>> addNote(
+      {required String docId, required String newNote, XFile? xfile});
   Future<Either<Failure, void>> editNote({
-    required String collectionPath,
-    required String subCollectionPath,
     required String docId,
     required String subDocId,
-    required String newNote,
+    required Map<String, dynamic> newData,
   });
-  Future<Either<Failure, void>> deleteNote({
-    required String collectionPath,
-    required String subCollectionPath,
+
+  Future<Either<Failure, void>> deleteNote(
+      {required String docId,
+      required String subDocId,
+      required String imageUrl});
+
+  Future<Either<Failure, String>> editNoteImage({
+    required String imageUrl,
+    required XFile newFile,
+  });
+  Future<Either<Failure, void>> deleteNoteImage({
     required String docId,
     required String subDocId,
+    required String imageUrl,
   });
 }

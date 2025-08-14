@@ -13,14 +13,20 @@ final class NotesLoading extends NotesState {}
 
 final class NotesAddSuccess extends NotesState {}
 
-final class NotesEditSuccess extends NotesState {}
+final class NotesEditSuccess extends NotesState {
+  final String updatedId; // أضف هذا
+  const NotesEditSuccess(this.updatedId);
+}
 
 final class NotesDeleteSuccess extends NotesState {}
 
 final class NotesLoaded extends NotesState {
   final List<NoteModel> notes;
+  final String? updatedId; // أضف هذا
 
-  const NotesLoaded({required this.notes});
+  const NotesLoaded({required this.notes, this.updatedId});
+  @override
+  List<Object> get props => [notes, updatedId ?? ''];
 }
 
 final class NotesFailure extends NotesState {

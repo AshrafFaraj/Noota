@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/utils/app_color.dart';
-import '../../../../../core/custom_bottom_sheet.dart';
+import 'custom_category_bottom_sheet.dart';
 import '../../../../../core/services/firestore_services.dart';
 import '../../../../notes/data/repo/note_repo_imp.dart';
 import '../../../../notes/presentation/manager/notes_cubit/notes_cubit.dart';
@@ -11,8 +11,8 @@ import '../../../../notes/presentation/view/pages/notes_view.dart';
 import '../../manager/categories_cubit/categories_cubit.dart';
 import 'home_crad.dart';
 
-class Home_GridView extends StatelessWidget {
-  const Home_GridView({
+class HomeGridView extends StatelessWidget {
+  const HomeGridView({
     super.key,
     required this.categoryController,
   });
@@ -74,7 +74,7 @@ class Home_GridView extends StatelessWidget {
                         btnOkColor: AppColor.primary,
                         btnOkOnPress: () {
                           categoryController.text = category.name;
-                          customBottomSheet(
+                          customCategoryBottomSheet(
                               context: context,
                               bottonTitel: 'تعديل القسم',
                               controller: categoryController,

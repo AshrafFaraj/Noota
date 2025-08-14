@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:note_app/test_page.dart';
 
 import '/firebase_options.dart';
 import 'core/utils/functions/initial_route.dart';
@@ -47,6 +48,7 @@ class NoteApp extends StatelessWidget {
     return MaterialApp(
         theme: myTheme,
         debugShowCheckedModeBanner: false,
+        // home: TestPage(),
         initialRoute: initialRoute(),
         routes: myRoutes);
   }

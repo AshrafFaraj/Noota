@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../core/custom_bottom_sheet.dart';
+import '../widgets/custom_category_bottom_sheet.dart';
 import '../../../../../core/utils/app_color.dart';
 import '../../manager/categories_cubit/categories_cubit.dart';
 import '../widgets/home_grid_view.dart';
@@ -41,13 +41,13 @@ class _HomeViewState extends State<HomeView> {
           'Home Page',
         ),
       ),
-      body: Home_GridView(
+      body: HomeGridView(
         categoryController: categoryController,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           categoryController.clear();
-          customBottomSheet(
+          customCategoryBottomSheet(
               context: context,
               bottonTitel: 'اضافة القسم',
               hint: 'ادخل اسم القسم الجديد',

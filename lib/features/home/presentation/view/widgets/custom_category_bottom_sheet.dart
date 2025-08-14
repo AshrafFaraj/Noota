@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '/core/utils/classes/app_validator.dart';
-import '../features/auth/presentation/view/widgets/custom_text_field.dart';
-import '../features/auth/presentation/view/widgets/custom_button.dart';
-import 'utils/app_color.dart';
+import '../../../../auth/presentation/view/widgets/custom_text_field.dart';
+import '../../../../auth/presentation/view/widgets/custom_button.dart';
+import '../../../../../core/utils/app_color.dart';
 
-void customBottomSheet({
+void customCategoryBottomSheet({
   required BuildContext context,
   TextEditingController? controller,
   void Function()? onPressed,
@@ -44,11 +44,7 @@ void customBottomSheet({
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: CustomButton(
-                              onPressed: () {
-                                if (formState.currentState!.validate()) {
-                                  onPressed;
-                                }
-                              },
+                              onPressed: onPressed,
                               color: AppColor.secondColor,
                               title: bottonTitel ?? 'حسناً'),
                         ),

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../constants/firestore_collections_path.dart';
+
 class FirestoreService {
   final _firestore = FirebaseFirestore.instance;
 
@@ -27,74 +29,76 @@ class FirestoreService {
   }
 
   Future<void> editDocument({
-    required String collectionPath,
     required String docId,
     required Map<String, dynamic> data,
   }) async {
-    await _firestore.collection(collectionPath).doc(docId).update(data);
+    await _firestore
+        .collection(
+          FirestoreCollecPath.categoriesCollec,
+        )
+        .doc(docId)
+        .update(data);
   }
 
   Future<void> deleteDocument({
-    required String collectionPath,
     required String docId,
   }) async {
-    await _firestore.collection(collectionPath).doc(docId).delete();
+    await _firestore
+        .collection(
+          FirestoreCollecPath.categoriesCollec,
+        )
+        .doc(docId)
+        .delete();
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getSubDocuments({
-    required String collectionPath,
     required String docId,
-    required String subCollectionPath,
   }) async {
     final snapshot = await _firestore
-        .collection(collectionPath)
+        .collection(
+          FirestoreCollecPath.categoriesCollec,
+        )
         .doc(docId)
-        .collection(subCollectionPath)
+        .collection(FirestoreCollecPath.noteSubCollec)
         .get();
 
     return snapshot;
   }
 
   Future<DocumentReference<Map<String, dynamic>>> addSubDocument({
-    required String collectionPath,
     required String docId,
-    required String subCollectionPath,
     required Map<String, dynamic> data,
   }) async {
     final response = await _firestore
-        .collection(collectionPath)
+        .collection(FirestoreCollecPath.categoriesCollec)
         .doc(docId)
-        .collection(subCollectionPath)
+        .collection(FirestoreCollecPath.noteSubCollec)
         .add(data);
 
     return response;
   }
 
   Future<dynamic> editSubDocument({
-    required String collectionPath,
     required String docId,
-    required String subCollectionPath,
     required String subDocId,
     required Map<String, dynamic> data,
   }) async {
     await _firestore
-        .collection(collectionPath)
+        .collection(FirestoreCollecPath.categoriesCollec)
         .doc(docId)
-        .collection(subCollectionPath)
+        .collection(FirestoreCollecPath.noteSubCollec)
         .doc(subDocId)
         .update(data);
   }
 
   Future<void> deleteSubDocument({
-    required String collectionPath,
     required String docId,
-    required String subCollectionPath,
     required String subDocId,
   }) async {
     await _firestore
-        .collection(collectionPath)
+        .collection(FirestoreCollecPath.categoriesCollec)
         .doc(docId)
-        .collection(subCollectionPath)
+        .collection(FirestoreCollecPath.noteSubCollec)
         .doc(subDocId)
         .delete();
   }
