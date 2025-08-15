@@ -1,57 +1,60 @@
+// image_compression_service.dart
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as p;
 
-/// ImageCompressionService
-/// مسؤول فقط عن ضغط الصور. يستقبل File (أو XFile عبر wrapper) ويعيد File مضغوط.
 class ImageCompressionService {
-  /// ضغط ملف وإرجاع ملف جديد داخل المجلد المؤقت
-  Future<XFile?> compressFile(
-    File file, {
+  Future<XFile?> compressXFile({
+    required XFile originalXFile,
     int quality = 70,
-    int minWidth = 800,
-    int minHeight = 800,
-    String targetPrefix = 'compressed_',
+    int maxWidth = 1024,
+    int maxHeight = 1024,
+    bool keepExif = false,
   }) async {
     try {
-      final dir = await getTemporaryDirectory();
-      final targetPath = path.join(
-        dir.path,
-        '\$targetPrefix\${DateTime.now().millisecondsSinceEpoch}\${path.extension(file.path)}',
+      final tempDir = await getTemporaryDirectory();
+      final targetPath = p.join(
+        tempDir.path,
+        'compressed_${DateTime.now().millisecondsSinceEpoch}${p.extension(originalXFile.path)}',
       );
 
       final result = await FlutterImageCompress.compressAndGetFile(
-        file.absolute.path,
+        originalXFile.path,
         targetPath,
         quality: quality,
-        minWidth: minWidth,
-        minHeight: minHeight,
-        keepExif: false,
+        minWidth: maxWidth,
+        minHeight: maxHeight,
+        keepExif: keepExif,
       );
 
-      return result;
+      if (result == null) {
+        debugPrint('❌ لم يتم ضغط الصورة');
+        return null;
+      }
+
+      return XFile(result.path);
     } catch (e) {
-      throw ImageCompressionException('فشل ضغط الصورة: $e');
+      debugPrint('❌ فشل ضغط الصورة: $e');
+      return null;
     }
   }
 
-  /// مساعدة لتمرير XFile مباشرة (تحولها إلى File ثم تضغط)
-  Future<XFile?> compressXFile(
-    XFile xfile, {
-    int quality = 70,
-    int minWidth = 800,
-    int minHeight = 800,
-    String targetPrefix = 'compressed_',
-  }) async {
-    final file = File(xfile.path);
-    return await compressFile(
-      file,
-      quality: quality,
-      minWidth: minWidth,
-      minHeight: minHeight,
-      targetPrefix: targetPrefix,
-    );
+  static double getFileSizeInMB(XFile file) {
+    return File(file.path).lengthSync() / (1024 * 1024);
+  }
+
+  static double getFileSizeInKB(XFile file) {
+    return File(file.path).lengthSync() / 1024;
+  }
+
+  static int determineCompressionQuality(XFile file) {
+    final sizeMB = getFileSizeInMB(file);
+    if (sizeMB > 5) return 50;
+    if (sizeMB > 2) return 65;
+    if (sizeMB > 1) return 75;
+    return 85;
   }
 }
 

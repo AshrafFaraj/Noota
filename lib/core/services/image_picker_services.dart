@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 /// ImagePickerService
@@ -8,26 +9,24 @@ class ImagePickerService {
 
   ImagePickerService({ImagePicker? picker}) : _picker = picker ?? ImagePicker();
 
-  ///XFile أو null. يختار صورة واحدة من الكاميرا أو المعرض ويعيد
   Future<XFile?> pickImage({bool fromCamera = false}) async {
     try {
-      final XFile? file = await _picker.pickImage(
+      return await _picker.pickImage(
         source: fromCamera ? ImageSource.camera : ImageSource.gallery,
-        imageQuality: 100, // لا نضغط هنا: مجرد نقل الصورة المختارة
+        imageQuality: 100,
       );
-      return file;
     } catch (e) {
-      throw ImagePickerException('فشل اختيار الصورة: $e');
+      debugPrint('❌ فشل اختيار الصورة: $e');
+      return null;
     }
   }
 
-  /// يختار عدة صور من المعرض (إن كانت مطلوبة)
   Future<List<XFile>?> pickMultiImage() async {
     try {
-      final files = await _picker.pickMultiImage(imageQuality: 100);
-      return files;
+      return await _picker.pickMultiImage(imageQuality: 100);
     } catch (e) {
-      throw ImagePickerException('فشل اختيار الصور: $e');
+      debugPrint('❌ فشل اختيار الصور: $e');
+      return null;
     }
   }
 }

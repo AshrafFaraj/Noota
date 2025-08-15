@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '/core/services/image_compress_service.dart';
 import '/features/notes/data/models/note_mode.dart';
 import '../../../../core/services/firebase_storage_services.dart';
 import '/core/errors/failure.dart';
@@ -13,6 +15,7 @@ class NoteRepoImp implements NoteRepo {
 
   final FirestoreService firestoreService;
   final _storage = StorageService();
+  final _imageCompressionService = ImageCompressionService();
 
   @override
   Future<Either<Failure, List<NoteModel>>> fetchNotes(
@@ -36,30 +39,47 @@ class NoteRepoImp implements NoteRepo {
   }
 
   @override
-  Future<Either<Failure, NoteModel>> addNote(
-      {required String docId, required String newNote, XFile? xfile}) async {
+  Future<Either<Failure, NoteModel>> addNote({
+    required String docId,
+    required String newNote,
+    XFile? xfile,
+  }) async {
     try {
       String? imageUrl;
 
       if (xfile != null) {
-        // 2. ضغط الصورة
-        // final compressedFile =
-        //     await _imageCompressionService.compressXFile(xfile);
-        // if (compressedFile != null) {
-        // 3. رفع الصورة
-        imageUrl = await _storage.uploadImage(
-          xfile,
+        // قبل الضغط
+        final beforeSize = ImageCompressionService.getFileSizeInKB(xfile);
+        debugPrint(
+            '📷 حجم الصورة قبل الضغط: ${beforeSize.toStringAsFixed(2)} KB');
+
+        // 1. ضغط الصورة
+        final compressed = await _imageCompressionService.compressXFile(
+          originalXFile: xfile,
+          quality: ImageCompressionService.determineCompressionQuality(xfile),
         );
+
+        // بعد الضغط
+        final afterSize = ImageCompressionService.getFileSizeInKB(compressed!);
+        debugPrint(
+            '📷 حجم الصورة بعد الضغط: ${afterSize.toStringAsFixed(2)} KB');
+
+        // 2. رفع الصورة إذا الضغط نجح
+        if (compressed != null) {
+          imageUrl = await _storage.uploadImage(compressed);
+        }
       }
-      final docRef = await firestoreService.addSubDocument(docId: docId, data: {
-        'note': newNote,
-        'imageUrl': imageUrl ?? 'none',
-      });
+
+      final docRef = await firestoreService.addSubDocument(
+        docId: docId,
+        data: {
+          'note': newNote,
+          'imageUrl': imageUrl ?? 'none',
+        },
+      );
 
       final docSnap = await docRef.get();
-      final note = NoteModel.fromDocumentSnapshot(docSnap);
-
-      return right(note);
+      return right(NoteModel.fromDocumentSnapshot(docSnap));
     } on FirebaseException catch (e) {
       return left(FirebaseFailure.fromFirebaseException(e));
     }
@@ -110,7 +130,7 @@ class NoteRepoImp implements NoteRepo {
   }) async {
     try {
       final downloadUrl = await _storage.updateImage(imageUrl, newFile);
-      return right(downloadUrl);
+      return right(downloadUrl!);
     } on FirebaseException catch (e) {
       return left(FirebaseFailure.fromFirebaseException(e));
     }
