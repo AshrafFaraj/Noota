@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../widgets/custom_note_bottom_sheet.dart';
-import '../widgets/custom_notes_grid.dart';
-import '../../../../../core/utils/app_color.dart';
+import '../widgets/notes_view_body.dart';
+import '../widgets/ui_switcher_button.dart';
 import '/features/notes/presentation/manager/notes_cubit/notes_cubit.dart';
 
 class NotesView extends StatefulWidget {
@@ -28,11 +28,25 @@ class _HomeViewState extends State<NotesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           widget.name,
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 30),
+            child: BlocBuilder<NotesCubit, NotesState>(
+              builder: (context, state) {
+                bool isGrid = BlocProvider.of<NotesCubit>(context).isGrid;
+                return UISwitcherButton(isGrid: isGrid);
+
+                // return ;
+              },
+            ),
+          )
+        ],
       ),
-      body: CustomNotesGrid(controller: controller, docId: widget.docId),
+      body: NotesViewBody(controller: controller, docId: widget.docId),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           controller.clear();
@@ -44,10 +58,9 @@ class _HomeViewState extends State<NotesView> {
               docId: widget.docId,
               notesCubit: context.read<NotesCubit>());
         },
-        backgroundColor: AppColor.secondColor,
         child: Icon(
           Icons.add,
-          color: AppColor.white,
+          // color: AppColors.white,
           size: 35,
         ),
       ),

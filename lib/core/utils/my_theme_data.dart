@@ -4,8 +4,8 @@ import 'app_color.dart';
 
 ThemeData myTheme = ThemeData(
     appBarTheme: AppBarTheme(
-        iconTheme: IconThemeData(color: AppColor.primary),
+        iconTheme: IconThemeData(color: AppColors.primary),
         titleTextStyle: TextStyle(
-            color: AppColor.primary,
+            color: AppColors.primary,
             fontSize: 18,
             fontWeight: FontWeight.w500)));

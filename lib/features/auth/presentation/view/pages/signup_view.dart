@@ -79,7 +79,7 @@ class _SignUpViewState extends State<SignUpView> {
         state is AuthLoading
             ? Positioned(
                 child: Container(
-                color: AppColor.black.withValues(alpha: 0.5),
+                color: AppColors.black.withValues(alpha: 0.5),
                 height: double.infinity,
                 width: double.infinity,
                 child: Center(

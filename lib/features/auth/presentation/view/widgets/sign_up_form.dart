@@ -68,7 +68,7 @@ class SignUpForm extends StatelessWidget {
                 }
               },
               title: 'Register',
-              color: AppColor.primary,
+              color: AppColors.primary,
             ),
           ],
         ));

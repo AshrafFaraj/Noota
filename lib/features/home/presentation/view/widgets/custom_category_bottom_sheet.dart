@@ -45,7 +45,7 @@ void customCategoryBottomSheet({
                           padding: const EdgeInsets.only(bottom: 10),
                           child: CustomButton(
                               onPressed: onPressed,
-                              color: AppColor.secondColor,
+                              color: AppColors.secondary,
                               title: bottonTitel ?? 'حسناً'),
                         ),
                       ],

@@ -1,14 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '/core/services/image_picker_services.dart';
 import '../../manager/notes_cubit/notes_cubit.dart';
-import 'note_card.dart';
+import 'custom_list_view.dart';
+import 'custom_masonry_grid.dart';
 
-class CustomNotesGrid extends StatelessWidget {
-  CustomNotesGrid({
+class NotesViewBody extends StatelessWidget {
+  NotesViewBody({
     super.key,
     required this.controller,
     required this.docId,
@@ -45,23 +45,18 @@ class CustomNotesGrid extends StatelessWidget {
       builder: (context, state) {
         if (state is NotesLoaded) {
           var notes = state.notes;
-          return MasonryGridView.count(
-            physics: const BouncingScrollPhysics(),
-            crossAxisCount: 2, // عدد الأعمدة
-            mainAxisSpacing: 8, // المسافة العمودية
-            crossAxisSpacing: 8, // المسافة الأفقية
-            itemCount: notes.length,
-            itemBuilder: (context, index) {
-              final item = notes[index];
-              return NoteCard(
-                key: ValueKey(item.id),
-                docId: docId,
-                note: item,
-                picker: picker,
-                controller: controller,
-              );
-            },
-          );
+          bool isGrid = BlocProvider.of<NotesCubit>(context).isGrid;
+          return isGrid
+              ? CustomMasonryGrid(
+                  notes: notes,
+                  docId: docId,
+                  picker: picker,
+                  controller: controller)
+              : CustomListView(
+                  notes: notes,
+                  docId: docId,
+                  picker: picker,
+                  controller: controller);
         } else if (state is NotesFailure) {
           return Center(
             child: Text(state.errMessage),

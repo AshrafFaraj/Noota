@@ -1,7 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../widgets/sign_out_button.dart';
+import '../widgets/theme_switcher_button.dart';
+import '/features/settings/theme_cubit/theme_cubit.dart';
+import '/features/settings/theme_cubit/theme_state.dart';
 import '../widgets/custom_category_bottom_sheet.dart';
 import '../../../../../core/utils/app_color.dart';
 import '../../manager/categories_cubit/categories_cubit.dart';
@@ -24,48 +27,42 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-                Navigator.of(context).pushReplacementNamed('signin');
-              },
-              icon: Icon(
-                Icons.exit_to_app,
-                size: 20,
-              ))
-        ],
-        title: Text(
-          'Home Page',
-        ),
-      ),
-      body: HomeGridView(
-        categoryController: categoryController,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          categoryController.clear();
-          customCategoryBottomSheet(
-              context: context,
-              bottonTitel: 'اضافة القسم',
-              hint: 'ادخل اسم القسم الجديد',
-              controller: categoryController,
-              onPressed: () {
-                context
-                    .read<CategoriesCubit>()
-                    .addCategory(newCategory: categoryController.text);
-                Navigator.pop(context);
-              });
-        },
-        backgroundColor: AppColor.secondColor,
-        child: Icon(
-          Icons.add,
-          color: AppColor.white,
-          size: 35,
-        ),
-      ),
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, state) {
+        final isDark = state is DarkThemeState;
+        return Scaffold(
+          appBar: AppBar(
+            actions: [ThemeSwitcherButton(isDark: isDark), SignOutButton()],
+            title: Text(
+              'الصفحة الرئيسية',
+            ),
+          ),
+          body: HomeGridView(
+            categoryController: categoryController,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              categoryController.clear();
+              customCategoryBottomSheet(
+                  context: context,
+                  bottonTitel: 'اضافة القسم',
+                  hint: 'ادخل اسم القسم الجديد',
+                  controller: categoryController,
+                  onPressed: () {
+                    context
+                        .read<CategoriesCubit>()
+                        .addCategory(newCategory: categoryController.text);
+                    Navigator.pop(context);
+                  });
+            },
+            child: Icon(
+              Icons.add,
+              color: AppColors.white,
+              size: 35,
+            ),
+          ),
+        );
+      },
     );
   }
 }

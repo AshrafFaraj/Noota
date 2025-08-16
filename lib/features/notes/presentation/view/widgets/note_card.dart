@@ -44,7 +44,7 @@ class NoteCard extends StatelessWidget {
                 dialogType: DialogType.warning,
                 animType: AnimType.bottomSlide,
                 btnOkText: 'تعديل',
-                btnOkColor: AppColor.primary,
+                btnOkColor: AppColors.primary,
                 btnOkOnPress: () {
                   controller.text = note.note;
                   customNoteBottomSheet(
@@ -64,7 +64,7 @@ class NoteCard extends StatelessWidget {
               ).show();
             },
             child: Card(
-              elevation: 0,
+              // elevation: 0,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
@@ -79,7 +79,7 @@ class NoteCard extends StatelessWidget {
                           customHeader: SizedBox(),
                           context: context,
                           body: NoteImage(imageUrl: note.imageUrl),
-                          btnOkColor: AppColor.primary,
+                          btnOkColor: AppColors.primary,
                           btnOkText: 'تغيير الصورة',
                           btnCancelText: 'ازالة الصورة',
                           btnOkOnPress: () async {

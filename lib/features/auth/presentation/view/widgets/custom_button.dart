@@ -28,7 +28,9 @@ class CustomButton extends StatelessWidget {
         child: Text(
           title,
           style: TextStyle(
-              color: AppColor.white, fontSize: 18, fontWeight: FontWeight.bold),
+              color: AppColors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -49,7 +51,7 @@ class LoginWithGoogle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: AppColor.secondColor, borderRadius: BorderRadius.circular(50)),
+          color: AppColors.secondary, borderRadius: BorderRadius.circular(50)),
       width: double.infinity,
       child: MaterialButton(
         elevation: 0,
@@ -64,7 +66,7 @@ class LoginWithGoogle extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                  color: AppColor.white,
+                  color: AppColors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.bold),
             ),

@@ -13,7 +13,7 @@ class Logo extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(30),
         decoration: BoxDecoration(
-            color: AppColor.grey2, borderRadius: BorderRadius.circular(100)),
+            color: AppColors.grey, borderRadius: BorderRadius.circular(100)),
         child: Image.asset(
           'assets/images/notes.png',
           height: 70,

@@ -29,8 +29,7 @@ class CustomTextField extends StatelessWidget {
         textDirection: textDirection,
         child: Container(
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: AppColor.grey2, borderRadius: BorderRadius.circular(50)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
           child: TextFormField(
             validator: validator,
             autofocus: true,

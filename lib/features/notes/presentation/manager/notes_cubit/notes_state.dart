@@ -1,10 +1,10 @@
 part of 'notes_cubit.dart';
 
-sealed class NotesState extends Equatable {
+sealed class NotesState {
   const NotesState();
 
-  @override
-  List<Object> get props => [];
+  // @override
+  // List<Object> get props => [];
 }
 
 final class NotesInitial extends NotesState {}
@@ -25,8 +25,8 @@ final class NotesLoaded extends NotesState {
   final String? updatedId; // أضف هذا
 
   const NotesLoaded({required this.notes, this.updatedId});
-  @override
-  List<Object> get props => [notes, updatedId ?? ''];
+  // @override
+  // List<Object> get props => [notes, updatedId ?? ''];
 }
 
 final class NotesFailure extends NotesState {

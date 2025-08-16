@@ -27,7 +27,7 @@ class AuthViewTailer extends StatelessWidget {
               actionTitle,
               style: TextStyle(
                   fontSize: 16,
-                  color: AppColor.primary,
+                  color: AppColors.primary,
                   fontWeight: FontWeight.w600),
             ))
       ],

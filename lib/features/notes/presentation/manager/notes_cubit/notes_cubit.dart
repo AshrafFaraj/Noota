@@ -12,6 +12,16 @@ class NotesCubit extends Cubit<NotesState> {
 
   NoteRepo noteRepo;
   List<NoteModel> _notes = [];
+  bool isGrid = true;
+
+  // bool get isGrid => _isGrid;
+
+  void setIsGrid() {
+    isGrid = !isGrid;
+
+    emit(NotesLoaded(notes: List.of(_notes)));
+    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^${isGrid}');
+  }
 
   Future<void> fetchNotes({
     required String docId,

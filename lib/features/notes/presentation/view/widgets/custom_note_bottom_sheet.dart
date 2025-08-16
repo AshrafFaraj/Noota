@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -59,9 +61,14 @@ void customNoteBottomSheet({
                                 if (_xfile != null) _isImage = true;
                               },
                               color: _isImage
-                                  ? AppColor.primary
-                                  : AppColor.secondColor,
+                                  ? AppColors.primary
+                                  : AppColors.secondary,
                               title: 'add image'),
+                        if (_xfile != null)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Image.file(File(_xfile!.path)),
+                          ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10, top: 10),
                           child: CustomButton(
@@ -80,7 +87,7 @@ void customNoteBottomSheet({
                                   Navigator.pop(context);
                                 }
                               },
-                              color: AppColor.secondColor,
+                              color: AppColors.secondary,
                               title: bottonTitel ?? 'حسناً'),
                         ),
                       ],

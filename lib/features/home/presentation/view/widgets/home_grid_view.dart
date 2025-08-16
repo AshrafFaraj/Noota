@@ -71,7 +71,7 @@ class HomeGridView extends StatelessWidget {
                         dialogType: DialogType.warning,
                         animType: AnimType.bottomSlide,
                         btnOkText: 'تعديل',
-                        btnOkColor: AppColor.primary,
+                        btnOkColor: AppColors.primary,
                         btnOkOnPress: () {
                           categoryController.text = category.name;
                           customCategoryBottomSheet(

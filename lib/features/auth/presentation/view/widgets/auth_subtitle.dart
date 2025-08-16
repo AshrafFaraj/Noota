@@ -14,7 +14,7 @@ class AuthSubTitle extends StatelessWidget {
     return Text(
       subTitle,
       style: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w400, color: AppColor.grey),
+          fontSize: 15, fontWeight: FontWeight.w400, color: AppColors.grey),
     );
   }
 }

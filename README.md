@@ -1,6 +1,6 @@
 # Noota 🗒️
 
-**Noota** is a lightweight, modern, and intuitive note-taking app built using **Flutter** and **Firebase**, designed with a clean **MVVM architecture** for scalability and maintainability. It lets users effortlessly create, edit, and delete notes with real-time cloud synchronization, ensuring your ideas are always safe and accessible from anywhere.
+**Noota** is a lightweight, modern, and intuitive note-taking app built using **Flutter** and **Firebase**, designed with a clean **MVVM architecture** with **Clean architecture**for scalability and maintainability. It lets users effortlessly create, edit, and delete notes with real-time cloud synchronization, ensuring your ideas are always safe and accessible from anywhere.
 
 ## 🚀 Features
 
@@ -17,12 +17,12 @@
 ## 🛠️ Built With
 
 * Flutter 💙
-* Firebase (Firestore, Auth) 🔥
+* Firebase (Firestore, Auth, Storage) 🔥
 * Cubit (from Bloc library) for state management
 
 ## 📦 Project Structure
 
-Organized following **MVVM** principles with clear separation of concerns, making the codebase easy to navigate, test, and extend.
+Organized following **MVVM** & **Clean architecture** principles with clear separation of concerns, making the codebase easy to navigate, test, and extend.
 
 ## 🌟 Getting Started
 

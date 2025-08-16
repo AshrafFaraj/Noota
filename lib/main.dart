@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_app/features/settings/theme_cubit/theme_cubit.dart';
+import 'package:note_app/features/settings/theme_cubit/theme_state.dart';
 // import 'package:note_app/test_page.dart';
 
 import '/firebase_options.dart';
 import 'core/utils/functions/initial_route.dart';
 import 'core/utils/my_routes.dart';
-import 'core/utils/my_theme_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,11 +47,18 @@ class NoteApp extends StatelessWidget {
       }
     });
 
-    return MaterialApp(
-        theme: myTheme,
-        debugShowCheckedModeBanner: false,
-        // home: TestPage(),
-        initialRoute: initialRoute(),
-        routes: myRoutes);
+    return BlocProvider(
+      create: (context) => ThemeCubit(),
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+              theme: state.themeData,
+              debugShowCheckedModeBanner: false,
+              // home: TestPage(),
+              initialRoute: initialRoute(),
+              routes: myRoutes);
+        },
+      ),
+    );
   }
 }

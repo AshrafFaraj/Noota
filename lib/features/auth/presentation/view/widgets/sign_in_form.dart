@@ -53,7 +53,7 @@ class SignInForm extends StatelessWidget {
                 child: Text(
                   'Forget Password?',
                   style: TextStyle(
-                      color: AppColor.primary,
+                      color: AppColors.primary,
                       fontSize: 16,
                       fontWeight: FontWeight.w600),
                 ),
@@ -68,13 +68,13 @@ class SignInForm extends StatelessWidget {
               }
             },
             title: 'Login',
-            color: AppColor.primary,
+            color: AppColors.primary,
           ),
           SizedBox(
             height: 30,
           ),
           LoginWithGoogle(
-              color: AppColor.secondColor, title: 'Login With Google'),
+              color: AppColors.secondary, title: 'Login With Google'),
         ],
       ),
     );
